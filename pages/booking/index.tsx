@@ -1,43 +1,38 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PropertyCard from "@/components/property/PropertyCard";
 
-export default function BookingForm() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvv: "",
-    billingAddress: "",
-  });
-
-  const [loading, setLoading] = useState(false);
+export default function Home() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties`
+        );
+        setProperties(response.data);
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to load properties. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings`, formData);
-      alert("Booking confirmed!");
-    } catch (err) {
-      setError("Failed to submit booking.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchProperties();
+  }, []);
+
+  if (loading) return <p>Loading properties...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Your form fields here */}
-      <button type="submit" disabled={loading}>
-        {loading ? "Processing..." : "Confirm & Pay"}
-      </button>
-      {error && <p className="text-red-500">{error}</p>}
-    </form>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
+      {properties.map((property) => (
+        <PropertyCard key={property.id} property={property} />
+      ))}
+    </div>
   );
 }
