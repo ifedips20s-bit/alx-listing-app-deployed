@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PropertyCard from "@/components/property/PropertyCard";
+import { PropertyProps } from "@/interfaces";
 
 export default function Home() {
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<PropertyProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +27,19 @@ export default function Home() {
   return (
     <div className="grid grid-cols-3 gap-4">
       {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
+        <PropertyCard
+  key={property.id}
+  property={{
+    id: property.id,
+    name: property.name,
+    price: property.price,
+    image: property.image,
+    rating: property.rating,
+    location: `${property.address.city}, ${property.address.country}`,
+    reviewsCount: 0, // placeholder until API provides it
+  }}
+/>
+
       ))}
     </div>
   );

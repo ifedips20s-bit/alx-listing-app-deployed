@@ -1,8 +1,17 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const ReviewSection = ({ propertyId }) => {
-  const [reviews, setReviews] = useState([]);
+interface Review {
+  id: number;
+  comment: string;
+}
+
+interface ReviewSectionProps {
+  propertyId: number; // <-- type the prop explicitly
+}
+
+const ReviewSection: React.FC<ReviewSectionProps> = ({ propertyId }) => {
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,12 +32,11 @@ const ReviewSection = ({ propertyId }) => {
   }, [propertyId]);
 
   if (loading) return <p>Loading reviews...</p>;
-  if (!reviews.length) return <p>No reviews yet.</p>;
 
   return (
-    <div className="space-y-4 p-4">
+    <div>
       {reviews.map((review) => (
-        <div key={review.id} className="border-b pb-2">
+        <div key={review.id}>
           <p>{review.comment}</p>
         </div>
       ))}

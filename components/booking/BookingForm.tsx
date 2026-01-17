@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, FormEvent } from "react"; // <-- import FormEvent
 
 export default function BookingForm() {
   const [formData, setFormData] = useState({
@@ -16,7 +16,8 @@ export default function BookingForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  // ✅ Type the event parameter
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");

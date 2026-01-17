@@ -33,7 +33,19 @@ export default function Home() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
       {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
+        <PropertyCard
+  key={property.id}
+  property={{
+    id: property.id,
+    name: property.name,
+    price: property.price,
+    image: property.image,
+    rating: property.rating,
+    location: `${property.address.city}, ${property.address.country}`,
+    reviewsCount: 0, // placeholder until API provides it
+  }}
+/>
+
       ))}
     </div>
   );
