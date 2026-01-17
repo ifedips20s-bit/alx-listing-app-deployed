@@ -14,9 +14,9 @@ export default function PropertyDetailPage() {
 
   useEffect(() => {
     const fetchProperty = async () => {
-      if (!id) return; // wait for router to provide the ID
+      if (!id) return;
       try {
-        const response = await axios.get(`http://localhost:3001/properties/${id}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/properties/${id}`);
         setProperty(response.data);
       } catch (err) {
         console.error("Error fetching property details:", err);
@@ -34,12 +34,9 @@ export default function PropertyDetailPage() {
   if (!property) return <p>Property not found.</p>;
 
   return (
-    <div className="container mx-auto p-6">
-      {/* Property details */}
+    <>
       <PropertyDetail property={property} />
-
-      {/* Reviews section */}
       <ReviewSection propertyId={property.id} />
-    </div>
+    </>
   );
 }
